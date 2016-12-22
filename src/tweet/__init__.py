@@ -1,6 +1,8 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
+import twitter
+
 
 def getConsumerKeyEnv():
     return os.environ.get("TWITTER_CONSUMER_KEY", None)
@@ -19,3 +21,14 @@ def getTweetingAllowedEnv():
         return True
     else:
         return False
+
+def getTwitterApi(verify=False):
+    api = twitter.Api(consumer_key=getConsumerKeyEnv(),
+                      consumer_secret=getConsumerSecretEnv(),
+                      access_token_key=getTokenKeyEnv(),
+                      access_token_secret=getTokenSecretEnv(),
+                      input_encoding='utf-8')
+    if verify:
+        resp = api.VerifyCredentials()
+        print resp
+    return api

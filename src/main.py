@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import helpers
-import twitter
+import config
+import healthcheck
+import tweet
 
-api = twitter.Api(consumer_key=helpers.getConsumerKeyEnv(),
-                  consumer_secret=helpers.getConsumerSecretEnv(),
-                  access_token_key=helpers.getTokenKeyEnv(),
-                  access_token_secret=helpers.getTokenSecretEnv(),
-                  input_encoding='utf-8')
+status = [healthcheck.check_site(site) for site in config.sites_to_check]
+print status
 
-print api.VerifyCredentials()
-
-tweeting_allowed = helpers.getTweetingAllowedEnv()
+api = tweet.getTwitterApi(True)
+tweeting_allowed = tweet.getTweetingAllowedEnv()
 
 if tweeting_allowed:
-    message = 'Nysse on korjattu!'
+    message = 'Kulkeekohan pukki nyssellä?'
     status = api.PostUpdate(message)
     print status

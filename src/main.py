@@ -8,8 +8,8 @@ import tweet
 status = [healthcheck.check_site(site) for site in config.sites_to_check]
 print status
 
-api = tweet.getTwitterApi(True)
-tweeting_allowed = tweet.getTweetingAllowedEnv()
+api = tweet.get_twitter_api(False)
+tweeting_allowed = tweet.is_tweeting_allowed()
 
 if tweeting_allowed:
     message = 'Kulkeekohan pukki nyssellä?'

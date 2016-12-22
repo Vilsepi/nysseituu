@@ -2,6 +2,7 @@
 
 import requests
 
+
 def _result(site, health, response=None, message=None):
     result = {
         "name": site["name"],
@@ -18,11 +19,9 @@ def check_site(site):
     response = None
     try:
         response = requests.get(site["url"])
-
         if response.status_code not in site["acceptable_statuses"]:
             print "Bad status code: {}".format(response.status_code)
             return _result(site, "DOWN", response, "Unacceptable status code")
-
         for mandatory_string in site.get("mandatory_strings", []):
             if mandatory_string not in response.text:
                 print "String not found in response: " + mandatory_string

@@ -17,6 +17,4 @@ sites_to_check = [
             "Apache Tomcat"
         ]
     }
-    # TODO Next time when api is down, check below url:
-    # http://lissu.tampere.fi/ajax_servers/busLocations.php
 ]

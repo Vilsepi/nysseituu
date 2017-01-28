@@ -1,0 +1,47 @@
+service: nysseituu
+
+provider:
+  name: aws
+  runtime: python2.7
+  region: eu-west-1
+  profile: heap
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:eu-west-1:*:*"
+
+package:
+  exclude:
+    - "export_secrets.*"
+    - "requirements.txt"
+    - "*.md"
+
+functions:
+  nysseituu:
+    handler: main.handler
+    memorySize: 256
+    events:
+      - schedule: rate(5 minutes)
+    environment:
+      TWEETING_ALLOWED: "False"
+
+resources:
+  Resources:
+    Table:
+      Type: AWS::DynamoDB::Table 
+      Properties:
+        TableName: nysseituu
+        AttributeDefinitions:
+          - AttributeName: key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: key
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

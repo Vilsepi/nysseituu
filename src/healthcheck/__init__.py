@@ -12,7 +12,7 @@ def _result(site, health, response=None, message=None):
         result["message"] = message
     if response is not None:
         result["status"] = response.status_code
-        result["response_time"] = response.elapsed.total_seconds()
+        result["response_time_ms"] = int(response.elapsed.total_seconds()*1000)
     return result
 
 def check_site(site):

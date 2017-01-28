@@ -1,3 +1,5 @@
 export_secrets.sh
 *.pyc
 build
+vendored
+.serverless

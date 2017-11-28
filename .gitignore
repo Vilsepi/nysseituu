@@ -1,6 +1,6 @@
 secret*
 *.pyc
-build
+nyssenv
 vendored
 .serverless
 todo.txt

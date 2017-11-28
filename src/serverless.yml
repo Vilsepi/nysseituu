@@ -1,5 +1,8 @@
 service: nysseituu
 
+custom:
+  secret: ${file(../secrets.yml)}
+
 provider:
   name: aws
   runtime: python2.7
@@ -14,6 +17,12 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
       Resource: "arn:aws:dynamodb:eu-west-1:*:*"
+  environment:
+    TWITTER_CONSUMER_KEY: ${self:custom.secret.twitter_consumer_key}
+    TWITTER_CONSUMER_SECRET: ${self:custom.secret.twitter_consumer_secret}
+    TWITTER_TOKEN_KEY: ${self:custom.secret.twitter_token_key}
+    TWITTER_TOKEN_SECRET: ${self:custom.secret.twitter_token_secret}
+    TWEETING_ALLOWED: "False"
 
 package:
   exclude:
@@ -33,7 +42,7 @@ functions:
 resources:
   Resources:
     Table:
-      Type: AWS::DynamoDB::Table 
+      Type: AWS::DynamoDB::Table
       Properties:
         TableName: nysseituu
         AttributeDefinitions:

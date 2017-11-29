@@ -12,21 +12,22 @@ def _result(site, health, response=None, message=None):
         result["message"] = message
     if response is not None:
         result["status"] = response.status_code
-        result["response_time_ms"] = int(response.elapsed.total_seconds()*1000)
+        result["response_time_ms"] = int(response.elapsed.total_seconds() * 1000)
     return result
+
 
 def check_site(site):
     response = None
     try:
         response = requests.get(site["url"])
         if response.status_code not in site["acceptable_statuses"]:
-            print "Bad status code: {}".format(response.status_code)
+            print("Bad status code: {}".format(response.status_code))
             return _result(site, "DOWN", response, "Unacceptable status code")
         for mandatory_string in site.get("mandatory_strings", []):
             if mandatory_string not in response.text:
-                print "String not found in response: " + mandatory_string
+                print("String not found in response: " + mandatory_string)
                 return _result(site, "DOWN", response, "String not found in response: {}".format(mandatory_string))
         return _result(site, "UP", response)
-    except Exception, err:
-        print err
+    except Exception as err:
+        print(err)
         return _result(site, "UNKNOWN", response, "Exception while trying to check site health: {}".format(err))

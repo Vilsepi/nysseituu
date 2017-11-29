@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
 
 import sys
@@ -30,20 +30,20 @@ def handler(event, context):
         "healthchecks": checks,
         "timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
     }
-    print json.dumps(result, indent=1)
+    print(json.dumps(result, indent=1))
 
     last_state_change = dynamo.get("last_state_change")
     if last_state_change:
         if last_state_change["service_is_up"] is not all_ok:
-            print "State has changed from {} to {}".format(last_state_change["service_is_up"], all_ok)
+            print("State has changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
             if tweet.is_tweeting_allowed():
                 api = tweet.get_twitter_api()
                 status = api.PostUpdate(message)
-                print status
+                print(status)
         else:
-            print "No change in state: {}".format(all_ok)
+            print("No change in state: {}".format(all_ok))
     else:
-        print "No previous state data found"
+        print("No previous state data found")
         last_state_change = {
             "service_is_up": result["service_is_up"],
             "last_changed": result["timestamp"]
@@ -55,4 +55,4 @@ def handler(event, context):
 
 
 if __name__ == "__main__":
-    print "Local execution is not supported. Please run this in AWS Lambda."
+    print("Local execution is not supported. Please run this in AWS Lambda.")

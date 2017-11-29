@@ -1,0 +1,10 @@
+[flake8]
+ignore =
+    # module level import not at top of file, because Serverless dependency imports
+    E402
+exclude =
+    .git,
+    .serverless,
+    vendored
+max-complexity = 10
+max-line-length = 130

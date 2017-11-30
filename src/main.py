@@ -37,14 +37,12 @@ def handler(event, context):
     }
     print(json.dumps(result, indent=1))
 
+    twitter = tweet.TwitterClient()
     last_state_change = dynamo.get("last_state_change")
     if last_state_change:
         if last_state_change["service_is_up"] is not all_ok:
             print("State has changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
-            if tweet.is_tweeting_allowed():
-                api = tweet.get_twitter_api()
-                status = api.PostUpdate(message)
-                print(status)
+            twitter.tweet(message)
         else:
             print("No change in state: {}".format(all_ok))
     else:

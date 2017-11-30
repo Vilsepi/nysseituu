@@ -38,7 +38,9 @@ def handler(event, context):
     print(json.dumps(result, indent=1))
 
     twitter = tweet.TwitterClient()
-    last_state_change = dynamo.get("last_state_change")
+    db = dynamo.DBClient()
+
+    last_state_change = db.get("last_state_change")
     if last_state_change:
         if last_state_change["service_is_up"] is not all_ok:
             print("State has changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
@@ -51,9 +53,9 @@ def handler(event, context):
             "service_is_up": result["service_is_up"],
             "last_changed": result["timestamp"]
         }
-        dynamo.put("last_state_change", last_state_change)
+        db.put("last_state_change", last_state_change)
 
-    dynamo.put("latest_healthcheck", result)
+    db.put("latest_healthcheck", result)
     return all_ok
 
 

@@ -26,6 +26,7 @@ provider:
     TWITTER_TOKEN_KEY: ${self:custom.secret.twitter_token_key}
     TWITTER_TOKEN_SECRET: ${self:custom.secret.twitter_token_secret}
     TWEETING_ALLOWED: "false"
+    IN_AWS: "true"
 
 package:
   exclude:

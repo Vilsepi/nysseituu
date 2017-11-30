@@ -23,9 +23,12 @@ Activate virtual environment:
 
     source nyssenv/bin/activate
 
-Install dependencies in the `src/` directory:
+Install dev dependencies in the `src/` directory:
 
-    cd src/
+    pip3 install -U -r requirements-dev.txt
+
+Install runtime dependencies in the `src/` directory:
+
     pip3 install -U -t vendored -r requirements.txt
 
 ## Deploying

@@ -23,12 +23,13 @@ provider:
     TWITTER_TOKEN_KEY: ${self:custom.secret.twitter_token_key}
     TWITTER_TOKEN_SECRET: ${self:custom.secret.twitter_token_secret}
     TWEETING_ALLOWED: "False"
+    NYSSEITUU_TABLE_NAME: nysseituu
 
 package:
   exclude:
-    - "export_secrets.*"
-    - "requirements.txt"
+    - "*.txt"
     - "*.md"
+    - ".flake8"
 
 functions:
   nysseituu:

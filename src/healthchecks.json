@@ -1,5 +1,4 @@
-
-sites_to_check = [
+[
     {
         "name": "Lissu Monitor",
         "url": "http://lissu.tampere.fi/monitor.php?stop=0014",

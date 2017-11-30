@@ -5,13 +5,12 @@ import sys
 import os
 import json
 import datetime
-import config
-import dynamo
 
 # Import vendor modules from a separate directory
 here = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(here, "./vendored"))
 
+import dynamo
 import healthcheck
 import tweet
 
@@ -19,8 +18,14 @@ SERVICE_DOWN = "Nysseituu, voihan pahus! :("
 SERVICE_UP = "Nysset kulkee, ainakin kartalla. :)"
 
 
+def get_healthcheck_config(filename):
+    with open(filename, "r") as json_file:
+        return json.load(json_file)
+
+
 def handler(event, context):
-    checks = [healthcheck.check_site(site) for site in config.sites_to_check]
+    config = get_healthcheck_config("healthchecks.json")
+    checks = [healthcheck.check_site(site) for site in config]
     all_ok = all([check["health"] == "UP" for check in checks])
     message = SERVICE_UP if all_ok else SERVICE_DOWN
 
@@ -55,4 +60,5 @@ def handler(event, context):
 
 
 if __name__ == "__main__":
-    print("Local execution is not supported. Please run this in AWS Lambda.")
+    print("Local execution is not fully supported. Please run this code in AWS Lambda.")
+    handler({}, {})

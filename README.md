@@ -1,6 +1,8 @@
 
 # [Nysseituu](https://twitter.com/nysseituu)
 
+[![Build Status](https://travis-ci.org/Vilsepi/nysseituu.svg?branch=master)](https://travis-ci.org/Vilsepi/nysseituu)
+
 ## Prerequisites
 
 Serverless framework is required for deploying the app. It is installed with npm:

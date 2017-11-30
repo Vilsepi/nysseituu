@@ -25,7 +25,8 @@ def get_healthcheck_config(filename):
 
 def handler(event, context):
     config = get_healthcheck_config("healthchecks.json")
-    checks = [healthcheck.check_site(site) for site in config]
+    checker = healthcheck.Healthcheck()
+    checks = [checker.check_site(site) for site in config]
     all_ok = all([check["health"] == "UP" for check in checks])
     message = SERVICE_UP if all_ok else SERVICE_DOWN
 

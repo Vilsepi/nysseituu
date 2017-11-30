@@ -10,7 +10,7 @@ class DBClient:
         self.table = None
         self.dynamo_available = os.environ.get("IN_AWS", "false").lower() == "true"
         if self.dynamo_available:
-            self.table = boto3.resource("dynamodb").Table(table_name)
+            self.table = boto3.resource("dynamodb").Table(self.table_name)
 
     def put(self, key, item):
         item["key"] = key

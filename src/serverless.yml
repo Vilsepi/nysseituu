@@ -1,12 +1,14 @@
 service: nysseituu
 
 custom:
+  region: eu-west-1
+  tableName: ${self:service}
   secret: ${file(../secrets.yml)}
 
 provider:
   name: aws
   runtime: python3.6
-  region: eu-west-1
+  region: ${self:custom.region}
   profile: heap
   iamRoleStatements:
     - Effect: Allow
@@ -16,14 +18,14 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:Scan
         - dynamodb:GetItem
-      Resource: "arn:aws:dynamodb:eu-west-1:*:*"
+      Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.tableName}"
   environment:
+    NYSSEITUU_TABLE_NAME: ${self:custom.tableName}
     TWITTER_CONSUMER_KEY: ${self:custom.secret.twitter_consumer_key}
     TWITTER_CONSUMER_SECRET: ${self:custom.secret.twitter_consumer_secret}
     TWITTER_TOKEN_KEY: ${self:custom.secret.twitter_token_key}
     TWITTER_TOKEN_SECRET: ${self:custom.secret.twitter_token_secret}
     TWEETING_ALLOWED: "False"
-    NYSSEITUU_TABLE_NAME: nysseituu
 
 package:
   exclude:
@@ -43,7 +45,7 @@ resources:
     Table:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: nysseituu
+        TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: key
             AttributeType: S

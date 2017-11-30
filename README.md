@@ -1,7 +1,9 @@
 
-# [Nysseituu](https://twitter.com/nysseituu)
+# [Nysseituu](https://twitter.com/nysseituu) [![Build Status](https://travis-ci.org/Vilsepi/nysseituu.svg?branch=master)](https://travis-ci.org/Vilsepi/nysseituu)
 
-[![Build Status](https://travis-ci.org/Vilsepi/nysseituu.svg?branch=master)](https://travis-ci.org/Vilsepi/nysseituu)
+A serverless Twitter bot that checks if the [Lissu Traffic Monitor](http://lissu.tampere.fi/?lang=en) service of [Tampere Regional Transport](http://joukkoliikenne.tampere.fi/en/home.html) has crashed again. Because as you know, it is down a lot.
+
+You can send feedback regarding the Lissu Traffic Monitor to Tampere Regional Transport [here](http://joukkoliikenne.tampere.fi/en/info/customer-service/feedback/feedback-online-services.html). Who knows, they might even fix their service some day.
 
 ## Prerequisites
 
@@ -38,3 +40,7 @@ Install runtime dependencies in the `src/` directory:
     sls invoke -f nysseituu -l
     sls logs -f nysseituu -t
     sls deploy function -f nysseituu && sls invoke -f nysseituu -l
+
+## Disclaimer
+
+This hobby project is not affiliated with Tampere Regional Transport or any other organization.

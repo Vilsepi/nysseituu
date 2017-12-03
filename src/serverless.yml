@@ -2,8 +2,9 @@ service: nysseituu
 frameworkVersion: ">=1.24.1 <2.0.0"
 
 custom:
-  region: eu-west-1
+  region: ${opt:region, 'eu-west-1'}
   tableName: ${self:service}-${opt:stage, 'dev'}
+  logGroupName: ${self:service}-${opt:stage, 'dev'}
   secret: ${file(../secrets.yml)}
 
 provider:
@@ -20,6 +21,13 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
       Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.tableName}"
+    - Effect: Allow
+      Action:
+        - logs:PutLogEvents
+        - logs:DescribeLogStreams
+      Resource:
+        - "arn:aws:logs:${self:custom.region}:*:log-group:${self:custom.logGroupName}"
+        - "arn:aws:logs:${self:custom.region}:*:log-group:${self:custom.logGroupName}:*:*"
   environment:
     NYSSEITUU_TABLE_NAME: ${self:custom.tableName}
     TWITTER_CONSUMER_KEY: ${self:custom.secret.twitter_consumer_key}
@@ -57,3 +65,15 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    CustomLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: ${self:custom.logGroupName}
+        RetentionInDays: 3653
+    CustomLogStream:
+      Type: AWS::Logs::LogStream
+      Properties:
+        LogGroupName:
+          Ref: CustomLogGroup
+        LogStreamName: state-changes

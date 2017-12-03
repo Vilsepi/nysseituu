@@ -13,6 +13,7 @@ sys.path.append(os.path.join(here, "./vendored"))
 import dynamo
 import healthcheck
 import tweet
+import cloudwatch_logger
 
 SERVICE_DOWN = "Nysseituu, voihan pahus! :("
 SERVICE_UP = "Nysset kulkee, ainakin kartalla. :)"
@@ -40,6 +41,7 @@ def handler(event, context):
 
     twitter = tweet.TwitterClient()
     db = dynamo.DBClient()
+    logger = cloudwatch_logger.CloudWatchLogger()
 
     previous_status_change = db.get("previous_status_change")
 
@@ -54,6 +56,11 @@ def handler(event, context):
         if previous_status_change["health"] != health:
             print(f"Service went now {health}!")
             _update_state()
+            logger.log("Service is now {}! It was {} since {}".format(
+                health,
+                previous_status_change.get('health'),
+                previous_status_change.get('timestamp'))
+            )
             twitter.tweet(message)
         else:
             print(f"Service is still {health} since {previous_status_change.get('timestamp')}")

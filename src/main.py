@@ -27,12 +27,13 @@ def handler(event, context):
     config = get_healthcheck_config("healthchecks.json")
     checker = healthcheck.Healthcheck()
     checks = [checker.check_site(site) for site in config]
-    all_ok = all([check["health"] == "UP" for check in checks])
-    message = SERVICE_UP if all_ok else SERVICE_DOWN
+    service_healthy = all([check["health"] == "UP" for check in checks])
+    health = "UP" if service_healthy else "DOWN"
+    message = SERVICE_UP if service_healthy else SERVICE_DOWN
 
     result = {
         "message": message,
-        "service_is_up": all_ok,
+        "health": health,
         "healthchecks": checks,
         "timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
     }
@@ -40,23 +41,28 @@ def handler(event, context):
     twitter = tweet.TwitterClient()
     db = dynamo.DBClient()
 
-    last_state_change = db.get("last_state_change")
-    if last_state_change:
-        if last_state_change["service_is_up"] is not all_ok:
-            print("State changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
+    previous_status_change = db.get("previous_status_change")
+
+    def _update_state():
+        current_state = {
+            "health": health,
+            "timestamp": result["timestamp"]
+        }
+        db.put("previous_status_change", current_state)
+
+    if previous_status_change:
+        if previous_status_change["health"] != health:
+            print(f"Service went now {health}!")
+            _update_state()
             twitter.tweet(message)
         else:
-            print("Same state as before, all_ok: {}".format(all_ok))
+            print(f"Service is still {health} since {previous_status_change.get('timestamp')}")
     else:
-        print("No previous state data found from cache")
-        last_state_change = {
-            "service_is_up": result["service_is_up"],
-            "last_changed": result["timestamp"]
-        }
-        db.put("last_state_change", last_state_change)
+        print(f"History not found in cache, service is currently {health}")
+        _update_state()
 
     db.put("latest_healthcheck", result)
-    return all_ok
+    return health
 
 
 if __name__ == "__main__":

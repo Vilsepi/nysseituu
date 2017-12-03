@@ -1,8 +1,9 @@
 service: nysseituu
+frameworkVersion: ">=1.24.1 <2.0.0"
 
 custom:
   region: eu-west-1
-  tableName: ${self:service}
+  tableName: ${self:service}-${opt:stage, 'dev'}
   secret: ${file(../secrets.yml)}
 
 provider:

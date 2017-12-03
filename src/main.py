@@ -36,7 +36,6 @@ def handler(event, context):
         "healthchecks": checks,
         "timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
     }
-    print(json.dumps(result, indent=1))
 
     twitter = tweet.TwitterClient()
     db = dynamo.DBClient()
@@ -44,12 +43,12 @@ def handler(event, context):
     last_state_change = db.get("last_state_change")
     if last_state_change:
         if last_state_change["service_is_up"] is not all_ok:
-            print("State has changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
+            print("State changed from {} to {}".format(last_state_change["service_is_up"], all_ok))
             twitter.tweet(message)
         else:
-            print("No change in state: {}".format(all_ok))
+            print("Same state as before, all_ok: {}".format(all_ok))
     else:
-        print("No previous state data found")
+        print("No previous state data found from cache")
         last_state_change = {
             "service_is_up": result["service_is_up"],
             "last_changed": result["timestamp"]

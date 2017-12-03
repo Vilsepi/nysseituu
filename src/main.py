@@ -14,6 +14,7 @@ import dynamo
 import healthcheck
 import tweet
 import cloudwatch_logger
+import notify
 
 SERVICE_DOWN = "Nysseituu, voihan pahus! :("
 SERVICE_UP = "Nysset kulkee, ainakin kartalla. :)"
@@ -42,6 +43,7 @@ def handler(event, context):
     twitter = tweet.TwitterClient()
     db = dynamo.DBClient()
     logger = cloudwatch_logger.CloudWatchLogger()
+    notifier = notify.Notifier()
 
     previous_status_change = db.get("previous_status_change")
 
@@ -56,11 +58,13 @@ def handler(event, context):
         if previous_status_change["health"] != health:
             print(f"Service went now {health}!")
             _update_state()
-            logger.log("Service is now {}! It was {} since {}".format(
+            msg_title = f"Lissu Liikenteenseuraaja is now {health}"
+            msg = "Lissu Liikenteenseuraaja is now {}! It has been {} since {}".format(
                 health,
                 previous_status_change.get('health'),
                 previous_status_change.get('timestamp'))
-            )
+            logger.log(msg)
+            notifier.notify(msg, msg_title)
             twitter.tweet(message)
         else:
             print(f"Service is still {health} since {previous_status_change.get('timestamp')}")

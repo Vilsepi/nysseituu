@@ -28,8 +28,15 @@ provider:
       Resource:
         - "arn:aws:logs:${self:custom.region}:*:log-group:${self:custom.logGroupName}"
         - "arn:aws:logs:${self:custom.region}:*:log-group:${self:custom.logGroupName}:*:*"
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        - Ref: AlarmTopic
   environment:
     NYSSEITUU_TABLE_NAME: ${self:custom.tableName}
+    NYSSEITUU_ALARM_TOPIC_ARN:
+      Ref: AlarmTopic
     TWITTER_CONSUMER_KEY: ${self:custom.secret.twitter_consumer_key}
     TWITTER_CONSUMER_SECRET: ${self:custom.secret.twitter_consumer_secret}
     TWITTER_TOKEN_KEY: ${self:custom.secret.twitter_token_key}
@@ -77,3 +84,8 @@ resources:
         LogGroupName:
           Ref: CustomLogGroup
         LogStreamName: state-changes
+
+    AlarmTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: Nysseituu

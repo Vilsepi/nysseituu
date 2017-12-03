@@ -10,7 +10,7 @@ class Notifier:
         self.client = boto3.client('sns')
 
     def notify(self, message, message_title):
-        response = self.client.publish(
+        self.client.publish(
             TopicArn=os.environ.get("NYSSEITUU_ALARM_TOPIC_ARN", None),
             Message=message,
             Subject=message_title,
@@ -21,4 +21,3 @@ class Notifier:
                 }
             }
         )
-        print(response)

@@ -1,7 +1,7 @@
 [
     {
         "name": "Lissu Monitor",
-        "url": "http://lissu.tampere.fi/monitor.php?stop=0014",
+        "url": "http://lissu.tampere.fi/monitor.php?stop=0505",
         "acceptable_statuses": [200],
         "mandatory_strings": [
             "table2"

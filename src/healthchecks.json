@@ -1,5 +1,13 @@
 [
     {
+        "name": "Lissu Ajax API",
+        "url": "http://lissu.tampere.fi/ajax_servers/busLocations.php",
+        "acceptable_statuses": [200],
+        "mandatory_strings": [
+            "deptTime"
+        ]
+    },
+    {
         "name": "Lissu Monitor",
         "url": "http://lissu.tampere.fi/monitor.php?stop=0505",
         "acceptable_statuses": [200],

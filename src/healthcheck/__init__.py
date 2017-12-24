@@ -23,6 +23,7 @@ class Healthcheck:
     def check_site(self, site):
         response = None
         try:
+            print(f"Checking site {site['name']}")
             response = requests.get(site["url"])
             if response.status_code not in site["acceptable_statuses"]:
                 print("Bad status code: {}".format(response.status_code))

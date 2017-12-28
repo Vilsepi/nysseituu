@@ -58,10 +58,10 @@ def handler(event, context):
         if previous_status_change["health"] != health:
             print(f"Service went now {health}!")
             _update_state()
-            msg_title = f"Lissu Liikenteenseuraaja is now {health}"
-            msg = "Lissu Liikenteenseuraaja is now {}! It has been {} since {}".format(
+            msg_title = f"Lissu Liikenteenseuranta is now {health}"
+            msg = "Lissu Liikenteenseuranta is now {}! It has been {} since {}".format(
                 health,
-                previous_status_change.get('health'),
+                previous_status_change.get('health').lower(),
                 previous_status_change.get('timestamp'))
             logger.log(msg)
             notifier.notify(msg, msg_title)

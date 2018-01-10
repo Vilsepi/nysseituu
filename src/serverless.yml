@@ -1,5 +1,5 @@
 service: nysseituu
-frameworkVersion: ">=1.24.1 <2.0.0"
+frameworkVersion: ">=1.25.0 <2.0.0"
 
 custom:
   region: ${opt:region, 'eu-west-1'}

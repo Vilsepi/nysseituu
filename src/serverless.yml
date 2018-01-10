@@ -54,6 +54,7 @@ functions:
   nysseituu:
     handler: main.handler
     memorySize: 256
+    timeout: 15
     events:
       - schedule: rate(5 minutes)
 

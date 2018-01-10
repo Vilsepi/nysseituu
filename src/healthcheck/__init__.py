@@ -24,7 +24,7 @@ class Healthcheck:
         response = None
         try:
             print(f"Checking site {site['name']}")
-            response = requests.get(site["url"])
+            response = requests.get(site["url"], timeout=5)
             if response.status_code not in site["acceptable_statuses"]:
                 print("Bad status code: {}".format(response.status_code))
                 return self._result(site, "DOWN", response, "Unacceptable status code")

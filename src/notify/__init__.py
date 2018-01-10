@@ -9,7 +9,7 @@ class Notifier:
     def __init__(self):
         self.client = boto3.client('sns')
 
-    def notify(self, message, message_title):
+    def notify(self, message, message_title="Nysseituu health update"):
         self.client.publish(
             TopicArn=os.environ.get("NYSSEITUU_ALARM_TOPIC_ARN", None),
             Message=message,

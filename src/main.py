@@ -24,11 +24,13 @@ def get_healthcheck_config(filename):
     with open(filename, "r") as json_file:
         return json.load(json_file)
 
+
 def allow_alarm_at_this_hour(now):
     if now.hour >= 23 or now.hour <= 1:
         return False
     else:
         return True
+
 
 def handler(event, context):
     config = get_healthcheck_config("healthchecks.json")

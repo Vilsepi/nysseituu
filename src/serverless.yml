@@ -12,6 +12,7 @@ provider:
   runtime: python3.6
   region: ${self:custom.region}
   profile: heap
+  tracing: true
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -33,6 +34,11 @@ provider:
         - sns:Publish
       Resource:
         - Ref: AlarmTopic
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
   environment:
     NYSSEITUU_TABLE_NAME: ${self:custom.tableName}
     NYSSEITUU_ALARM_TOPIC_ARN:
@@ -49,6 +55,10 @@ package:
     - "*.txt"
     - "*.md"
     - ".flake8"
+
+# https://github.com/serverless/serverless/issues/3495
+plugins:
+  - serverless-plugin-tracing
 
 functions:
   nysseituu:

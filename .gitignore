@@ -4,3 +4,4 @@ nyssenv
 vendored
 .serverless
 todo.txt
+node_modules

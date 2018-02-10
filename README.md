@@ -33,6 +33,10 @@ Install runtime dependencies in the `src/` directory:
 
     pip3 install -U -t vendored -r requirements.txt
 
+Install Serverless plugins
+
+    npm install --save-dev serverless-plugin-tracing
+
 ## Deploying
 
     sls deploy -v

@@ -1,3 +1,4 @@
 requests==2.18.4
 requests-oauthlib==0.8.0
 python-twitter==3.3
+aws-xray-sdk==0.95

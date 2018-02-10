@@ -16,6 +16,12 @@ import tweet
 import cloudwatch_logger
 import notify
 
+if os.environ.get("IN_AWS", "false").lower() == "true":
+    from aws_xray_sdk.core import xray_recorder  # noqa
+    from aws_xray_sdk.core import patch_all  # noqa
+    patch_all()
+    xray_recorder.configure(sampling=False)
+
 SERVICE_DOWN = "Nysseituu, voihan pahus! :("
 SERVICE_UP = "Nysset kulkee, ainakin kartalla. :)"
 

@@ -1,5 +1,5 @@
 service: nysseituu
-frameworkVersion: ">=1.25.0 <2.0.0"
+frameworkVersion: ">=1.26.0 <2.0.0"
 
 custom:
   region: ${opt:region, 'eu-west-1'}
@@ -54,11 +54,12 @@ functions:
   nysseituu:
     handler: main.handler
     memorySize: 256
-    timeout: 15
+    timeout: 20
     events:
       - schedule: rate(2 minutes)
 
 resources:
+  Description: Nysseituu bus health check
   Resources:
     Table:
       Type: AWS::DynamoDB::Table

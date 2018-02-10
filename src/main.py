@@ -24,6 +24,11 @@ def get_healthcheck_config(filename):
     with open(filename, "r") as json_file:
         return json.load(json_file)
 
+def allow_alarm_at_this_hour(now):
+    if now.hour >= 23 or now.hour <= 1:
+        return False
+    else:
+        return True
 
 def handler(event, context):
     config = get_healthcheck_config("healthchecks.json")
@@ -32,12 +37,12 @@ def handler(event, context):
     service_healthy = all([check["health"] == "UP" for check in checks])
     health = "UP" if service_healthy else "DOWN"
     message = SERVICE_UP if service_healthy else SERVICE_DOWN
-
+    now = datetime.datetime.utcnow()
     result = {
         "message": message,
         "health": health,
         "healthchecks": checks,
-        "timestamp": datetime.datetime.utcnow().isoformat() + 'Z'
+        "timestamp": now.isoformat() + 'Z'
     }
 
     twitter = tweet.TwitterClient()
@@ -63,8 +68,9 @@ def handler(event, context):
                 previous_status_change.get('health').lower(),
                 previous_status_change.get('timestamp'))
             logger.log(msg)
-            notifier.notify(msg)
-            twitter.tweet(message)
+            if allow_alarm_at_this_hour(now):
+                notifier.notify(msg)
+                twitter.tweet(message)
         else:
             print(f"Service is still {health} since {previous_status_change.get('timestamp')}")
     else:

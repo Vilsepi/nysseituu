@@ -32,7 +32,7 @@ def get_healthcheck_config(filename):
 
 
 def allow_alarm_at_this_hour(now):
-    if now.hour >= 23 or now.hour <= 1:
+    if now.hour >= 21 or now.hour <= 2:
         return False
     else:
         return True
